@@ -90,7 +90,7 @@ client.on('message', msg => {
   command = command.slice(prefix.length);
   let args = msg.content.split(" ").slice(1);
  
-    if(command === "clear") {
+    if(command === "!clear") {
         const emoji = client.emojis.find("name", "wastebasket")
     let textxt = args.slice(0).join("");
     if(msg.member.hasPermission("MANAGE_MESSAGES")) {
@@ -109,7 +109,7 @@ client.on('message', msg => {
 
 
 client.on('message', message => {
-    if (message.content.startsWith("رابط")) {
+    if (message.content.startsWith("!رابط")) {
  
   message.channel.createInvite({
         thing: true,
@@ -141,7 +141,7 @@ client.on('message', message => {
 
 
 client.on('message', async message =>{
-  var prefix = "*";
+  var prefix = "!";
 const ms = require("ms");
 if (message.author.omar) return;
 if (!message.content.startsWith(prefix)) return;
@@ -233,33 +233,52 @@ client.on('message', function(message) {
 
 
 client.on('message', message => {
-  if (message.content.startsWith(prefix + "deafen")) {
+  if (message.content.startsWith(prefix ! "deafen")) {
     if (!message.member.hasPermission('DEAFEN_MEMBERS')) return;
   { message.member.setDeaf(true);
     }
   }
     });
 client.on('message', message => {
-  if (message.content.startsWith(prefix + "vmute")) {
+  if (message.content.startsWith(prefix ! "vmute")) {
     if (!message.member.hasPermission('DEAFEN_MEMBERS')) return;
   { message.member.setMute(true);
     }
   }
     });
 client.on('message', message => {
-  if (message.content.startsWith(prefix + "undeafen")) {
+  if (message.content.startsWith(prefix ! "undeafen")) {
     if (!message.member.hasPermission('DEAFEN_MEMBERS')) return;
   { message.member.setDeaf(false);
     }
   }
     });
 client.on('message', message => {
-  if (message.content.startsWith(prefix + "vunmute")) {
+  if (message.content.startsWith(prefix ! "vunmute")) {
     if (!message.member.hasPermission('MUTE_MEMBERS')) return;
   { message.member.setMute(false);
     }
   }
     });
 	
-	
+client.on('message', message => {
+ 
+    if(message.content.startsWith(prefix ! 'rep')) {
+      if(!message.channel.guild) return;
+                    moment.locale('en');
+                  var getvalueof = message.mentions.users.first()
+                    if(!getvalueof) return message.channel.send(`**:mag: |  ${message.author.username}, the user could not be found.    **`);
+                       if(getvalueof.id == message.author.id) return message.channel.send(`**${message.author.username}, you cant give yourself a reputation !**`)
+    if(profile[message.author.id].reps != moment().format('L')) {
+            profile[message.author.id].reps = moment().format('L');
+            profile[getvalueof.id].rep = Math.floor(profile[getvalueof.id].rep+1);
+         message.channel.send(`** :up:  |  ${message.author.username} has given ${getvalueof} a reputation point!**`)
+        } else {
+         message.channel.send(`**:stopwatch: |  ${message.author.username}, you can raward more reputation  ${moment().endOf('day').fromNow()} **`)
+        }
+       }
+});	
+
+const credits = JSON.parse(fs.readFileSync("./creditsCode.json", "utf8")); const coolDown = new Set(); client.on('message',async message => { if(message.author.bot) return; if(!credits[message.author.id]) credits[message.author.id] = { credits: 50 }; let userData = credits[message.author.id]; let m = userData.credits; fs.writeFile("./creditsCode.json", JSON.stringify(credits), (err) => { if (err) console.error(err); }); credits[message.author.id] = { credits: m + 0.5, } if(message.content.startsWith(prefix ! "credit" || prefix ! "credits")) { message.channel.send(`**${message.author.username}, your :credit_card: balance is \`\`${userData.credits}\`\`.**`); } }); client.on('message', async message => { let amount = 250; if(message.content.startsWith(prefix ! "daily")) { if(message.author.bot) return; if(coolDown.has(message.author.id)) return message.channel.send(`**:stopwatch: | ${message.author.username}, your daily :yen: credits refreshes in \`\`1 Day\`\`.**`); let userData = credits[message.author.id]; let m = userData.credits + amount; credits[message.author.id] = { credits: m }; fs.writeFile("./creditsCode.json", JSON.stringify(userData.credits + amount), (err) => { if (err) console.error(err); }); message.channel.send(`**:atm: | ${message.author.username}, you received your :yen: ${amount} credits!**`).then(() => { coolDown.add(message.author.id); }); setTimeout(() => { coolDown.remove(message.author.id); },86400000); } });
+
 client.login(process.env.BOT_TOKEN);	
